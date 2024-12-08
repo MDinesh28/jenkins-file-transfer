@@ -111,3 +111,40 @@ pipeline {
 ---
 
 This setup ensures seamless file sharing between Linux and Windows using Jenkins and OpenSSH.
+
+
+
+#  Pipeline Transfer, Extract, and Cleanup ZIP File on Windows Server
+
+
+1. **Transfer a ZIP File**:  
+   It securely copies a ZIP file (`ala.zip`) from the Linux Jenkins server to a specified directory (`C:/md/`) on the Windows server using SCP.  
+
+2. **Unzip and Delete**:  
+   Once the ZIP file is transferred, it executes a PowerShell command on the Windows server to:  
+   - Extract the contents of the ZIP file into the same directory.  
+   - Remove the ZIP file after extraction to clean up.  
+
+---
+
+### Explanation of Key Parts
+
+- **SCP Command**:  
+  The `scp` command copies files over SSH. The `-o StrictHostKeyChecking=no` option disables SSH host key verification, ensuring the process doesn't stall due to unknown hosts.  
+
+- **SSH and PowerShell Command**:  
+  The `ssh` command connects to the Windows server, and the subsequent PowerShell command performs two operations:  
+  - `Expand-Archive`: Unzips the file.  
+  - `Remove-Item`: Deletes the ZIP file after extraction.  
+
+- **PowerShell Syntax**:  
+  Backslashes (`\\`) are used to escape characters in the Jenkins shell.  
+
+---
+
+### Suggestions for Use
+- **Verify Paths**: Ensure the directories (`C:/md/`) exist on the Windows server. If not, modify the script to create them or adjust the paths.  
+- **Permissions**: Ensure the `Administrator` user has the required permissions to perform the actions on the target directories.  
+- **Testing**: Test each stage separately to ensure proper functionality.  
+
+
